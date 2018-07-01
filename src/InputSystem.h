@@ -17,6 +17,8 @@ public:
 
   void setCityMap(CityMap* map) { m_cityMap = map; }
 
+  void frame();
+
 protected:
 
   RenderSystem* m_rs;
@@ -29,5 +31,7 @@ protected:
   int m_clickflags = 0;
 
   CityMap* m_cityMap = 0;
+
+  bool m_allowDrag = false;
 
 };

@@ -29,7 +29,7 @@ public:
 
   void setCityMap(CityMap* map) { m_cityMap = map; }
 
-  void performTileAction(int i);
+  bool performTileAction(int i);
 
   Menu* getMenu() { return m_menu; }
   static void drawObjModel_square();
@@ -55,6 +55,13 @@ protected:
 
   //
   void checkRoadTile(int, int);
+  void checkPipeTiles(int, int);
+  void checkPipeTile(int, int);
+  void checkUndergroundTile(int i, int j);
+  int checkUndergroundTile(const CityTile& a, const CityTile& b, const CityTile& c);
+
+  void drawCliffSide(glm::mat4 MVP, char i, bool h = true);
+
 
   // Vars
 
@@ -84,11 +91,15 @@ protected:
   CityMap* m_cityMap = 0;
 
   int m_zoomFactor = 3;
-  int m_zoom = 1<<3;
+  float m_zoom = 0.5 + 0.5 * (1<<3);
 
   // Meshes
   std::vector<Mesh*> road_meshes;
   std::vector<Mesh*> house_meshes;
+  std::vector<Mesh*> resource_meshes;
+  std::vector<Mesh*> pipe_meshes;
+  std::vector<Mesh*> cliff_meshes;
+  std::vector<Mesh*> tree_meshes;
 
   //
   Menu* m_menu = 0;

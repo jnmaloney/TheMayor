@@ -245,6 +245,53 @@ void Mesh::upload_obj()
 }
 
 
+void Mesh::drawWireframe(GLuint uniformDiffuse, int tag)
+{
+  if (m_matElements[m_active].size() == 0) return;
+
+  glEnableVertexAttribArray(attribute_v_coord);
+  // Describe our vertices array to OpenGL (it can't guess its format automatically)
+  glBindBuffer(GL_ARRAY_BUFFER, m_vbo_vertices);
+  glVertexAttribPointer(
+    attribute_v_coord,  // attribute
+    4,                  // number of elements per vertex, here (x,y,z,w)
+    GL_FLOAT,           // the type of each element
+    GL_FALSE,           // take our values as-is
+    0,                  // no extra data between each position
+    0                   // offset of first element
+  );
+
+
+  float colour1[] = {1.f, 1.f, 1.f };
+  float colour2[] = {1.f, 0.f, 0.f };
+  float colour3[] = {0.f, 1.f, 0.f };
+  float colour4[] = {0.f, 0.f, 1.f };
+  float colour12[] = {0.5f, 0.f, 0.f };
+  float colour13[] = {0.f, 0.5f, 0.f };
+  float colour14[] = {0.f, 0.f, 0.5f };
+
+  if (tag == 0) glUniform3fv(uniformDiffuse, 1, colour1);
+  if (tag == 1) glUniform3fv(uniformDiffuse, 1, colour2);
+  if (tag == 2) glUniform3fv(uniformDiffuse, 1, colour4);
+  if (tag == 3) glUniform3fv(uniformDiffuse, 1, colour3);
+  if (tag == 11) glUniform3fv(uniformDiffuse, 1, colour12);
+  if (tag == 12) glUniform3fv(uniformDiffuse, 1, colour14);
+  if (tag == 13) glUniform3fv(uniformDiffuse, 1, colour13);
+
+  for (auto i = m_matIboElements.begin(); i != m_matIboElements.end(); ++i)
+  {
+     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*i).second);
+     int size = m_matElements[(*i).first].size();
+
+     glDrawElements(GL_LINES, size, GL_UNSIGNED_SHORT, 0);
+     //glDrawElements(GL_POINTS, size, GL_UNSIGNED_SHORT, 0);
+
+  }
+
+  glDisableVertexAttribArray(attribute_v_coord);
+}
+
+
 void Mesh::draw(GLuint uniformDiffuse)
 {
   if (m_matElements[m_active].size() == 0) return;
@@ -379,6 +426,10 @@ static glm::vec3 desaturate(glm::vec3 input)
 
 void Mesh::setColourSceme(int i)
 {
+  if (i == 0)
+  {
+    m_colours.resize(0);
+  }
   if (i == 1)
   {
     m_colours.resize(0);
@@ -464,6 +515,13 @@ void Mesh::setColourSceme(int i)
     m_colours.push_back(desaturate(glm::vec3(0.059f, 0.607f, 0.800f))); // glass
     m_colours.push_back(desaturate(glm::vec3(1.0f, 0.480f, 0.037f)));
     m_colours.push_back(desaturate(glm::vec3(0.800f, 0.070f, 0.037f)));
+  }
+  if (i == 100)
+  {
+    // Underground
+    m_colours.resize(0);
+    m_colours.push_back( glm::vec3( 196.f / 255.f, 138.f / 255.f,  105.f / 255.f ) ); // Sandstone
+    m_colours.push_back( glm::vec3( 151.f / 255.f, 134.f / 255.f,  118.f / 255.f ) ); // Mix
   }
 }
 

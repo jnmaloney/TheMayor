@@ -1,7 +1,6 @@
 #pragma once
 
 #include "graphics.h"
-#include "shaders.h"
 #include <string>
 #include <vector>
 #include <map>
@@ -23,6 +22,7 @@ public:
   void upload_obj();
 
   void draw(GLuint uniformDiffuse = 0);
+  void drawWireframe(GLuint uniformDiffuse = 0, int tag = 0);
   void draw_bbox();
 
   // material mode
