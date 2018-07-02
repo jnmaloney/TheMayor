@@ -7,4 +7,4 @@ A City Builder game for WebGL
   <img src="https://img.itch.zone/aW1hZ2UvMjczNjIxLzEzMzAxMzQucG5n/250x600/vOGVIn.png"/>
 </p>
 
-[*The Mayor* on itch.io](https://jnmaloney.itch.io/the-mayor)
+Play online - [*The Mayor* on itch.io](https://jnmaloney.itch.io/the-mayor)
