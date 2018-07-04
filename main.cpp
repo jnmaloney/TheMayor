@@ -16,32 +16,22 @@ RenderSystem* g_rs = 0;
 InputSystem* g_is = 0;
 CityMap g_map;
 
+
 void draw()
 {
   //
   // Drawing
   //
-
-  // Draw
   g_rs->draw();
-
-  // Swap buffers
-  // glfwSwapBuffers(g_window);
-  // glfwPollEvents();
 }
 
 
 void input()
 {
-
   //
   // Input
   //
-
-  // Check if the ESC key was pressed or the window was closed
-  // while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
-  //      glfwWindowShouldClose(window) == 0 );
-
+  g_is->frame();
 }
 
 
@@ -80,13 +70,10 @@ int init()
   }
 
   glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
-  // glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // We want OpenGL 3.3
-  // glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-  // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // We don't want the old OpenGL
 
   // Open a window and create its OpenGL context
-  g_window = glfwCreateWindow( 1280, 720, "Mega Racer", NULL, NULL);
+  g_window = glfwCreateWindow( 1280, 720, "The Mayor", NULL, NULL);
   if( g_window == NULL )
   {
       fprintf( stderr, "Failed to open GLFW window.\n" );
@@ -94,15 +81,8 @@ int init()
       return -1;
   }
   glfwMakeContextCurrent(g_window); // Initialize GLEW
-  //glewExperimental=true; // Needed in core profile
-  // if (glewInit() != GLEW_OK)
-  // {
-  //     fprintf(stderr, "Failed to initialize GLEW\n");
-  //     return -1;
-  // }
 
-
-
+  // Create game objects
   RenderSystem* rs = new RenderSystem();
   g_rs = rs;
   g_rs->setCityMap(&g_map);

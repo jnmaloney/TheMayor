@@ -12,12 +12,22 @@ enum TILE_TYPE
 class CityTile
 {
 public:
+  // Special flag
   char isDefault = 0;
+
+  // Sky data
   unsigned char airPollution = 0;
+
+  // Surface data
   TILE_TYPE tileType = TILE_VOID;
   char data[8];
-  char pipeType = 0;
+
+  // Utility connection
   char foundational = 0;
+  char surfaceUtilityFlag = 0;
+  
+  // Underground data
+  char pipeType = 0;
   char pipeRend = 0;
   char pipeAng = 0;
   char un1 = 0;
@@ -25,7 +35,6 @@ public:
   char un3 = 0;
   char un4 = 0;
   char utilityFlag = 0;
-  char surfaceUtilityFlag = 0;
 };
 
 

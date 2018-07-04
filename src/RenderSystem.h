@@ -21,21 +21,20 @@ public:
 
   void draw();
 
+  // Important square drawing
+  static void drawObjModel_square();
+
+  // Cursor Management
+  void hideToolCursor();
+  void showToolCursor();
+  void setCityMap(CityMap* map) { m_cityMap = map; }
+  bool performTileAction(int i);
+  Menu* getMenu() { return m_menu; }
 
   // Camera move callback
   void move(double, double);
   void cursor_pos(double, double);
   void zoom(int);
-
-  void setCityMap(CityMap* map) { m_cityMap = map; }
-
-  bool performTileAction(int i);
-
-  Menu* getMenu() { return m_menu; }
-  static void drawObjModel_square();
-
-  void hideToolCursor();
-  void showToolCursor();
 
 protected:
 
@@ -50,16 +49,17 @@ protected:
 
   // Scene drawing
   void drawTile(int i, int j, glm::mat4 MVP);
-  void drawObjModel_obj();
-  void draw_bbox();
+  // void drawObjModel_obj();
+  // void draw_bbox();
 
-  //
+  // Scene management
   void checkRoadTile(int, int);
   void checkPipeTiles(int, int);
   void checkPipeTile(int, int);
   void checkUndergroundTile(int i, int j);
   int checkUndergroundTile(const CityTile& a, const CityTile& b, const CityTile& c);
 
+  // Extra drawing code
   void drawCliffSide(glm::mat4 MVP, char i, bool h = true);
 
 
@@ -80,18 +80,22 @@ protected:
   unsigned int m_colBuffer = 0;
   unsigned int m_posBuffer = 0;
 
+  // Non - core
+
   // View settings
   double m_cameraX = 50;
   double m_cameraY = 50;
-
-  double m_cursorX = 0;
-  double m_cursorY = 0;
+  int m_zoomFactor = 3;
+  float m_zoom = 0.5 + 0.5 * (1<<3);
 
   // City Map
   CityMap* m_cityMap = 0;
+  double m_cursorX = 0;
+  double m_cursorY = 0;
+  bool m_showToolCursor = false;
 
-  int m_zoomFactor = 3;
-  float m_zoom = 0.5 + 0.5 * (1<<3);
+  //
+  Menu* m_menu = 0;
 
   // Meshes
   std::vector<Mesh*> road_meshes;
@@ -100,9 +104,4 @@ protected:
   std::vector<Mesh*> pipe_meshes;
   std::vector<Mesh*> cliff_meshes;
   std::vector<Mesh*> tree_meshes;
-
-  //
-  Menu* m_menu = 0;
-
-  bool m_showToolCursor = false;
 };

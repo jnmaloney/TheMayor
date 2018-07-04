@@ -17,6 +17,7 @@ public:
 
   void setCityMap(CityMap* map) { m_cityMap = map; }
 
+  // Step through the story logic
   void frame();
 
 protected:
