@@ -16,7 +16,7 @@ int CityMap::dice()
 
 CityMap::CityMap()
 {
-  defaultTile.tileType = TILE_ROAD;
+  defaultTile.road = 1;
   defaultTile.isDefault = true;
 
 
@@ -46,15 +46,14 @@ void CityMap::generate()
     {
       if (dice() > 420)
       {
-        tiles[i][j].tileType = TILE_TREE;
-        TreeData & data = (TreeData&)tiles[i][j].data;
-        while (data.treeAng1 + data.treeAng2 +
-               data.treeAng3 + data.treeAng4 == 0)
+        tiles[i][j].object_type = 1;
+        while (tiles[i][j].treeAng1 + tiles[i][j].treeAng2 +
+               tiles[i][j].treeAng3 + tiles[i][j].treeAng4 == 0)
         {
-          if (dice() > 300) data.treeAng1 = dice();
-          if (dice() > 300) data.treeAng2 = dice();
-          if (dice() > 300) data.treeAng3 = dice();
-          if (dice() > 300) data.treeAng4 = dice();
+          if (dice() > 300) tiles[i][j].treeAng1 = dice();
+          if (dice() > 300) tiles[i][j].treeAng2 = dice();
+          if (dice() > 300) tiles[i][j].treeAng3 = dice();
+          if (dice() > 300) tiles[i][j].treeAng4 = dice();
         }
       }
     }
@@ -97,131 +96,48 @@ CityTile& CityMap::getTile(unsigned int i, unsigned int j)
 void CityMap::update()
 {
   int powerCount = 0;
-  m_pop = 0;
-  nHouseRoads = 0;
-  nHouseWatered = 0;
-  nHousePowered = 0;
-  nHouseData = 0;
-  nHasJobs = 0;
-  int jobCount = 0;
+
 
   for (int i = 0; i < m_width; ++i)
   {
     for (int j = 0; j < m_height; ++j)
     {
-
-      CityTile& tile = tiles[i][j];
-
       // Residence
-      if (tiles[i][j].tileType == TILE_ZONE)
+      if (tiles[i][j].object_type == 2 && m_grow && dice() < 100)
       {
-        ZoneData& data = (ZoneData&)tile.data;
+        // Check road
+        CityTile& t_n = getTile(i, j - 1);
+        CityTile& t_s = getTile(i, j + 1);
+        CityTile& t_e = getTile(i + 1, j);
+        CityTile& t_w = getTile(i - 1, j);
 
-        if (data.zone == 1)
-        {
-          // Check road
-          CityTile& t_n = getTile(i, j - 1);
-          CityTile& t_s = getTile(i, j + 1);
-          CityTile& t_e = getTile(i + 1, j);
-          CityTile& t_w = getTile(i - 1, j);
+        int num = 0;
+        if (t_n.road) num += 1;
+        if (t_s.road) num += 1;
+        if (t_e.road) num += 1;
+        if (t_w.road) num += 1;
 
-          int num = 0;
-          if (t_n.tileType == TILE_ROAD) num += 1;
-          if (t_s.tileType == TILE_ROAD) num += 1;
-          if (t_e.tileType == TILE_ROAD) num += 1;
-          if (t_w.tileType == TILE_ROAD) num += 1;
-
-          if (num == 0) continue;
-          ++nHouseRoads;
-
-          // Check power / water
-          if (0 == (tile.surfaceUtilityFlag & (1 << 2))) continue;
-          ++nHouseWatered;
-          if (0 == (tile.surfaceUtilityFlag & (1 << 1))) continue;
-          ++nHousePowered;
-
-          if (tile.surfaceUtilityFlag & (1 << 3)) ++nHouseData;
-          if (data.buildAng2 > 35 && 0 == (tile.surfaceUtilityFlag & (1 << 3))) continue;
-          if (data.buildAng2 > 39 && m_jobs) continue;
-
-          if (m_grow && dice() < 100) {} else continue;
-
-          {
-            // Grow
-            data.buildAng2 += 1;
-            if (data.buildAng2 > 49) data.buildAng2 = 49;
-            data.buildAng1 = 1 + data.buildAng2 / 10;
-          }
-        }
-        else if (data.zone == 2)
-        {
-          // Check power / water
-          if (0 == (tile.surfaceUtilityFlag & (1 << 1))) continue;
-          if (0 == (tile.surfaceUtilityFlag & (1 << 2))) continue;
-
-          if (data.buildAng2 > 8 && 0 == (tile.surfaceUtilityFlag & (1 << 3))) continue;
-
-          // Check road
-          CityTile& t_n = getTile(i, j - 1);
-          CityTile& t_s = getTile(i, j + 1);
-          CityTile& t_e = getTile(i + 1, j);
-          CityTile& t_w = getTile(i - 1, j);
-
-          int num = 0;
-          if (t_n.tileType == TILE_ROAD) num += 1;
-          if (t_s.tileType == TILE_ROAD) num += 1;
-          if (t_e.tileType == TILE_ROAD) num += 1;
-          if (t_w.tileType == TILE_ROAD) num += 1;
-
-          if (num == 0) continue;
-
-          {
-            // Grow
-            data.buildAng2 += 1;
-            if (data.buildAng2 > 19) data.buildAng2 = 19;
-            data.buildAng1 = 6 + data.buildAng2 / 10;
-          }
+        if (num) {
+          // Grow
+          tiles[i][j].treeAng2 += 1;
+          if (tiles[i][j].treeAng2 > 49) tiles[i][j].treeAng2 = 49;
+          tiles[i][j].treeAng1 = 1 + tiles[i][j].treeAng2 / 10;
         }
       }
 
-      // Job counting
-      if (tile.tileType == TILE_ZONE)
-      {
-        ZoneData& data = (ZoneData&)tiles[i][j].data;
-        if (data.zone == 1)
-        {
-          jobCount -= data.buildAng2;
-        }
-        if (data.zone == 2)
-        {
-          jobCount += 100.f * data.buildAng2;
-          nHasJobs = 1;
-        }
-      }
-
-
-      // Power counting...
-      // Consume power
-      if (tile.tileType == TILE_ZONE &&
-          (tile.surfaceUtilityFlag & (1<<1)))
-      {
-        ZoneData& data = (ZoneData&)tiles[i][j].data;
-        powerCount -= data.buildAng2;
-        m_pop += data.buildAng2;
-      }
-      // Add power
-      else if (tiles[i][j].tileType == TILE_BUILD)
-      {
-        BuildData& data = (BuildData&)tiles[i][j].data;
-        if (data.resourceType == 4)
-        {
-          powerCount += data.resourceValue;
-        }
-      }
-
+      // Power counting
+      if (tiles[i][j].object_type == 2) powerCount -= tiles[i][j].treeAng2;
+      if (tiles[i][j].object_type == 3) powerCount += 500000;
     }
   }
 
   m_grow = (powerCount > 0);
-  m_jobs = (jobCount > 0);
+}
+
+
+void CityMap::draw()
+{
+  // Find tiles to render
+
+  // Submit to render queues
 }

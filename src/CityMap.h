@@ -1,7 +1,21 @@
 #pragma once
 
 
-#include "TileTypes.h"
+class CityTile
+{
+public:
+  int isDefault = 0;
+  int surface = 0;
+  int zone = 0;
+  int object_type = 0;
+  int road = 0;
+  int roadNum = 0;
+  int roadAng = 0;
+  int treeAng1 = 0;
+  int treeAng2 = 0;
+  int treeAng3 = 0;
+  int treeAng4 = 0;
+};
 
 
 class CityMap
@@ -15,18 +29,12 @@ public:
 
   CityTile& getTile(unsigned int i, unsigned int j);
 
-  void update();
+  void draw();
 
-  int getPop() { return m_pop; }
+  void update();
 
   const unsigned int m_width = 142;
   const unsigned int m_height = 142;
-
-  int nHouseRoads = 0;
-  int nHouseWatered = 0;
-  int nHousePowered = 0;
-  int nHouseData = 0;
-  int nHasJobs = 0;
 
 protected:
 
@@ -34,9 +42,6 @@ protected:
   CityTile tiles[142][142];
 
   bool m_grow = false;
-  bool m_jobs = true;
-
-  int m_pop = 0;
 
   int dice();
 
