@@ -135,9 +135,121 @@ void CityMap::update()
 }
 
 
-void CityMap::draw()
+void CityMap::checkRoadTiles(int ci, int cj)
 {
-  // Find tiles to render
+  checkRoadTile(ci, cj);
+  checkRoadTile(ci, cj+1);
+  checkRoadTile(ci, cj-1);
+  checkRoadTile(ci-1, cj);
+  checkRoadTile(ci+1, cj);
+}
 
-  // Submit to render queues
+
+void CityMap::checkRoadTile(int i, int j)
+{
+  CityTile& t = getTile(i, j);
+  if (t.road == 0) return;
+
+  CityTile& t_n = getTile(i, j - 1);
+  CityTile& t_s = getTile(i, j + 1);
+  CityTile& t_e = getTile(i + 1, j);
+  CityTile& t_w = getTile(i - 1, j);
+
+  int num = 0;
+  if (t_n.road) num += 1;
+  if (t_s.road) num += 1;
+  if (t_e.road) num += 1;
+  if (t_w.road) num += 1;
+
+  int x = 0;
+  if (t_n.road) x += 1;
+  if (t_s.road) x += 2;
+  if (t_e.road) x += 4;
+  if (t_w.road) x += 8;
+
+
+  t.roadNum = num;
+
+
+  // ..nsew
+  if (x == 0b0000)
+  {
+    t.roadNum = 0;
+    t.roadAng = 0;
+  }
+  else if (x == 0b0001)
+  {
+    t.roadNum = 0;
+    t.roadAng = 1;
+  }
+  else if (x == 0b0010)
+  {
+    t.roadNum = 0;
+    t.roadAng = 1;
+  }
+  else if (x == 0b0011)
+  {
+    t.roadNum = 0;
+    t.roadAng = 1;
+  }
+  else if (x == 0b0100)
+  {
+    t.roadNum = 0;
+    t.roadAng = 0;
+  }
+  else if (x == 0b0101)
+  {
+    t.roadNum = 1;
+    t.roadAng = 0;
+  }
+  else if (x == 0b0110)
+  {
+    t.roadNum = 1;
+    t.roadAng = 1;
+  }
+  else if (x == 0b0111)
+  {
+    t.roadNum = 2;
+    t.roadAng = 0;
+  }
+  else if (x == 0b1000)
+  {
+    t.roadNum = 0;
+    t.roadAng = 0;
+  }
+  else if (x == 0b1001)
+  {
+    t.roadNum = 1;
+    t.roadAng = 3;
+  }
+  else if (x == 0b1010)
+  {
+    t.roadNum = 1;
+    t.roadAng = 2;
+  }
+  else if (x == 0b1011)
+  {
+    t.roadNum = 2;
+    t.roadAng = 2;
+  }
+  else if (x == 0b1100)
+  {
+    t.roadNum = 0;
+    t.roadAng = 0;
+  }
+  else if (x == 0b1101)
+  {
+    t.roadNum = 2;
+    t.roadAng = 3;
+  }
+  else if (x == 0b1110)
+  {
+    t.roadNum = 2;
+    t.roadAng = 1;
+  }
+  else if (x == 0b1111)
+  {
+    t.roadNum = 3;
+    t.roadAng = 0;
+  }
 }

@@ -33,10 +33,15 @@ public:
 
   void update();
 
-  const unsigned int m_width = 142;
-  const unsigned int m_height = 142;
+  const unsigned int m_width = 256;
+  const unsigned int m_height = 256;
+
+
+  void checkRoadTiles(int i, int j);
 
 protected:
+
+  void checkRoadTile(int i, int j);
 
   CityTile defaultTile;
   CityTile tiles[142][142];

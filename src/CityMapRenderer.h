@@ -28,5 +28,7 @@ public:
 
 protected:
 
+  void drawTile(CityTile& tile, glm::mat4& local);
+
   std::vector<Mesh*> m_meshes;
 };

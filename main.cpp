@@ -15,11 +15,13 @@
 #include "MenuBuild.h"
 #include "CityMapRenderer.h"
 #include "imgui.h"
+#include "ActionManager.h"
 
 
 RenderSystem* g_rs = 0;
 InputSystem* g_is = 0;
 CityMap g_map;
+ActionManager g_actionManager(g_map);
 
 WindowManager g_windowManager;
 MenuManager g_menuManager;
@@ -35,14 +37,20 @@ void draw()
   g_rs->start();
   //g_renderQueue.draw(g_rs->uniformML, g_rs->uniformDiffuse);
   g_mapRenderer.tick();
-  g_mapRenderer.m_renderQueue.draw(g_rs->uniformML, g_rs->uniformDiffuse);
-  g_mapRenderer.m_renderQueueAdd.draw(g_rs->uniformML, g_rs->uniformDiffuse);
+  g_mapRenderer.m_renderQueue.draw(g_rs->uniformML, g_rs->uniformDiffuse, g_rs);
+  g_mapRenderer.m_renderQueueAdd.draw(g_rs->uniformML, g_rs->uniformDiffuse, g_rs);
   g_rs->end();
 
   g_menuManager.predraw();
   g_menuBuild.drawHeader();
   g_menuBuild.draw();
   g_menuManager.postdraw(g_windowManager);
+
+  g_actionManager.setNextAction(g_menuBuild.getNextAction());
+  g_actionManager.setCursorPos(
+    (int)(g_rs->m_cursorX + 0.5f),
+    (int)(g_rs->m_cursorY + 0.5f)
+  );
 }
 
 
@@ -74,7 +82,14 @@ void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
+  if (ImGui::GetIO().WantCaptureMouse) return;
+
   g_is->mouse_button_callback(button, action, mods);
+
+  if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+  {
+    g_actionManager.performTileAction();
+  }
 }
 
 

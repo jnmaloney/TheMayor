@@ -56,7 +56,6 @@ void MenuBuild::draw()
       "Bulldoze", "",
   };
 
-  static int clicked = -1;
   bool doCols = false; //(clicked > -1);
 
   ImVec2 pos(12.f, 40.f + 12.f);
@@ -92,7 +91,7 @@ void MenuBuild::draw()
   for (int i = 0; i < 10; ++i)
   {
     int j = 4;
-    if (clicked == i) j = 2;
+    if (m_action == i + 1) j = 2;
 
     ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(j/7.0f, 0.6f, 0.6f));
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(j/7.0f, 0.7f, 0.7f));
@@ -100,8 +99,8 @@ void MenuBuild::draw()
 
     if (ImGui::Button(texts[2*i], size))
     {
-      if (clicked == i) clicked = -1;
-      else clicked = i;
+      if (m_action == i + 1) m_action = 0;
+      else m_action = i + 1;
     }
     if (ImGui::IsItemHovered())
     {

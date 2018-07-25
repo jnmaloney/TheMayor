@@ -13,4 +13,10 @@ public:
 
   void draw();
 
+  int getNextAction() { return m_action; }
+
+protected:
+
+  int m_action = 0;
+
 };
