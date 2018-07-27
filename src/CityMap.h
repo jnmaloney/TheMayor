@@ -15,6 +15,17 @@ public:
   int treeAng2 = 0;
   int treeAng3 = 0;
   int treeAng4 = 0;
+  int pipeType = 0;
+  int pipeNum = 0;
+  int pipeAng = 0;
+  int un1 = 0;
+  int un2 = 0;
+  int un3 = 0;
+  int un4 = 0;
+  int surfaceUtilityFlag = 0;
+  int utilityFlag = 0;
+  int airPollution = 0;
+  bool foundational = false;
 };
 
 
@@ -38,13 +49,26 @@ public:
 
 
   void checkRoadTiles(int i, int j);
+  void checkPipeTiles(int i, int j);
+
+  int m_pop = 0;
+
+  int m_connected = 0;
+  int m_watered = 0;
+  int m_powered = 0;
+  int m_powered_surface = 0;
+  int m_data_connected = 0;
+  int m_comm = 0;
 
 protected:
 
   void checkRoadTile(int i, int j);
+  void checkPipeTile(int i, int j);
+  void checkUndergroundTile(int i, int j);
+  int checkUndergroundTile(const CityTile& a, const CityTile& b, const CityTile& c);
 
   CityTile defaultTile;
-  CityTile tiles[142][142];
+  CityTile tiles[256][256];
 
   bool m_grow = false;
 

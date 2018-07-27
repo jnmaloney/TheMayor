@@ -19,10 +19,11 @@ public:
 
   void setCursorPos(int i, int j);
 
-protected:
+  bool active() { return m_action > 0; }
 
-  void checkRoadTiles(int i, int j);
-  void checkRoadTile(int i, int j);
+  bool continueAction() { return m_action == 1 || m_action == 2 || m_action == 3; }
+
+protected:
 
   int m_action = 0;
   CityTile* m_tile;

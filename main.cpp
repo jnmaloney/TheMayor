@@ -16,6 +16,7 @@
 #include "CityMapRenderer.h"
 #include "imgui.h"
 #include "ActionManager.h"
+#include "Simulation.h"
 
 
 RenderSystem* g_rs = 0;
@@ -35,14 +36,19 @@ CityMapRenderer g_mapRenderer;
 void draw()
 {
   g_rs->start();
-  //g_renderQueue.draw(g_rs->uniformML, g_rs->uniformDiffuse);
+
+  if (g_menuBuild.m_showOverlay == -1)
+    g_mapRenderer.generateQueue(g_menuBuild.m_groundState);
+  else
+    g_mapRenderer.generateQueue(2 + g_menuBuild.m_showOverlay);
+
   g_mapRenderer.tick();
   g_mapRenderer.m_renderQueue.draw(g_rs->uniformML, g_rs->uniformDiffuse, g_rs);
-  g_mapRenderer.m_renderQueueAdd.draw(g_rs->uniformML, g_rs->uniformDiffuse, g_rs);
+  if (g_actionManager.active())
+    g_mapRenderer.m_renderQueueAdd.draw(g_rs->uniformML, g_rs->uniformDiffuse, g_rs);
   g_rs->end();
 
   g_menuManager.predraw();
-  g_menuBuild.drawHeader();
   g_menuBuild.draw();
   g_menuManager.postdraw(g_windowManager);
 
@@ -59,6 +65,22 @@ void draw()
 //
 void input()
 {
+  static int timer = 0;
+  ++timer;
+  if (timer < 60) return;
+  timer = 0;
+
+  g_map.update();
+  g_menuBuild.m_pop = g_map.m_pop;
+  if (g_menuBuild.m_tutorialState == 1 && g_map.m_connected > 1) g_menuBuild.m_tutorialState++;
+  if (g_menuBuild.m_tutorialState == 2 && g_map.m_watered > 1) g_menuBuild.m_tutorialState++;
+  if (g_menuBuild.m_tutorialState == 3 && g_map.m_powered > 1) g_menuBuild.m_tutorialState++;
+  if (g_menuBuild.m_tutorialState == 4 && g_map.m_powered_surface) g_menuBuild.m_tutorialState++;
+  if (g_menuBuild.m_tutorialState == 5 && g_map.m_comm) g_menuBuild.m_tutorialState++;
+  if (g_menuBuild.m_tutorialState == 6 && g_map.m_data_connected) g_menuBuild.m_tutorialState++;
+  if (g_menuBuild.m_tutorialState == 7 && g_map.m_pop >= 5000) g_menuBuild.m_tutorialState = 0;
+
+  Simulation::doSkyStep(&g_map);
 }
 
 
@@ -71,12 +93,18 @@ void window_size_callback(GLFWwindow* window, int width, int height)
 }
 
 
+bool m_mouseDrag = false;
 void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
 {
   if (ImGui::GetIO().WantCaptureMouse) return;
 
   g_is->cursor_pos_callback(xpos, ypos);
   g_rs->setCursor(xpos, ypos);
+
+  if (m_mouseDrag)
+  {
+    g_actionManager.performTileAction();
+  }
 }
 
 
@@ -89,6 +117,15 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
   if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
   {
     g_actionManager.performTileAction();
+
+    if (g_actionManager.continueAction()) m_mouseDrag = true;
+  }
+  else m_mouseDrag = false;
+
+  if (button == GLFW_MOUSE_BUTTON_RIGHT)
+  {
+    //g_actionManager.setNextAction(0);
+    g_menuBuild.clearAction();
   }
 }
 
@@ -132,6 +169,8 @@ int init()
   g_menuManager.init(g_windowManager);
 
   g_rs = new RenderSystem();
+  g_rs->m_cameraX = 128.0;
+  g_rs->m_cameraY = 128.0;
   g_rs->init(g_windowManager);
   //g_rs->setCityMap(&g_map);
 
@@ -142,8 +181,11 @@ int init()
 
   g_mapRenderer.m_cityMap = &g_map;
   g_mapRenderer.m_rs = g_rs;
+  // g_mapRenderer.loadMeshes();
+  // g_mapRenderer.generateQueue();
   g_mapRenderer.loadMeshes();
-  g_mapRenderer.generateQueue();
+  // g_mapRenderer.generateQueue();
+  // g_mapRenderer.tick();
 
   // Window size callback
   glfwSetWindowSizeCallback(g_windowManager.g_window, window_size_callback);
