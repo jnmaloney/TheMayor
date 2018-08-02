@@ -24,7 +24,15 @@ void Simulation::doSkyStep(CityMap* a_map)
       int c = i * a_map->m_height + j;
 
       if (tile.roadNum && tile.isDefault == 0) source += 15; // ROAD
-      if (tile.zone) source += 150; // BUILD
+
+      //if (tile.zone) source += 150; // BUILD
+      if (tile.zone == 1) source += 3 * tile.treeAng1;
+      if (tile.zone == 2) source += 8 * tile.treeAng1;
+      if (tile.object_type == 3) source += 250;
+      if (tile.object_type == 4) source += 150;
+      if (tile.object_type == 5) source += 150;
+      if (tile.object_type == 6) source +=  50;
+
       if (tile.object_type == 1) source -= 15; // TREE
 
       v[c] = tile.airPollution + source +

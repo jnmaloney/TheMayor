@@ -197,9 +197,9 @@ void MenuBuild::drawBuild()
       "Water", "Build a water tower",
       "Pwr Gen", "Power Generator",
       "Pwr Sub", "Power Substation",
-      "Data Hub", "",
-      "Data Node", "",
-      "Bulldoze", "",
+      "Data Hub", "Central data system",
+      "Data Node", "Local data system",
+      "Bulldoze", "Flatten it",
   };
 
   const char* texts2[] = {

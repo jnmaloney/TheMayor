@@ -221,6 +221,18 @@ void CityMapRenderer::loadMeshes()
   housePalletteMax.colours.push_back(0.7f*glm::vec3(203.f/255.f, 206.f/255.f, 190.f/255.f)); // Tint
   housePalletteMax.colours.push_back(0.7f*glm::vec3(219.f/255.f, 203.f/255.f, 189.f/255.f)); // Tint
 
+  // extra (20)
+  housePalletteMax.colours.push_back(glm::vec3(197.f/255.f, 204.f/255.f, 192.f/255.f)); // zotzenhein roof
+  housePalletteMax.colours.push_back(glm::vec3(237.f/255.f, 179.f/255.f, 158.f/255.f)); // zotzenhein roof
+  housePalletteMax.colours.push_back(glm::vec3(119.f/255.f, 126.f/255.f, 133.f/255.f)); // bognor roof
+  housePalletteMax.colours.push_back(glm::vec3(135.f/255.f, 21.f/255.f, 31.f/255.f)); // quebec roof
+  housePalletteMax.colours.push_back(glm::vec3(142.f/255.f, 153.f/255.f, 153.f/255.f)); // quebec roof
+  housePalletteMax.colours.push_back(glm::vec3(251.f/255.f, 252.f/255.f, 252.f/255.f)); // zotzenhein wall
+  housePalletteMax.colours.push_back(glm::vec3(254.f/255.f, 254.f/255.f, 254.f/255.f)); // zotzenhein wall
+  housePalletteMax.colours.push_back(glm::vec3(194.f/255.f, 175.f/255.f, 145.f/255.f)); // bognor wall
+  housePalletteMax.colours.push_back(glm::vec3(153.f/255.f, 138.f/255.f, 107.f/255.f)); // quebec wall
+  housePalletteMax.colours.push_back(glm::vec3(171.f/255.f, 165.f/255.f, 155.f/255.f)); // quebec wall
+
   m_meshes[2]->pallette = &housePalletteMax;
   m_meshes[9]->pallette = &housePalletteMax;
   m_meshes[10]->pallette = &housePalletteMax;
@@ -761,7 +773,7 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
     m_renderQueue.setProgram(m_rs->programObject);
     m_renderQueue.setMesh(m_meshes[15]);
 
-    glm::mat4 sublocal = glm::scale(local, glm::vec3(0.20f));
+    glm::mat4 sublocal = glm::scale(local, glm::vec3(0.16f));
 
     m_renderQueue.setMVP(sublocal);
   }
@@ -803,14 +815,18 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
 
     int i = local[3][0];
     int j = local[3][1];
-    int r1 = (i + i*i + j*j) % 11;
+    int r1 = (i + i*i + j*j) % 5;
     int r2 = (j + i*i + j*j) % 5;
-    int r3 = (i*j + i) % 3;
+    int r3 = (i*j + i) % 2;
 
     std::vector<int> p_id;
-    p_id.push_back(15 + r2); // Roof
+    // p_id.push_back(15 + r2); // Roof
+    // p_id.push_back(12 + r3); // Trim
+    // p_id.push_back(0 + r1); // Wall
+    // p_id.push_back(11); // Window
+    p_id.push_back(20 + r1); // Roof
     p_id.push_back(12 + r3); // Trim
-    p_id.push_back(0 + r1); // Wall
+    p_id.push_back(25 + r1); // Wall
     p_id.push_back(11); // Window
     m_renderQueue.setPallette(p_id);
 
@@ -826,14 +842,18 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
 
     int i = local[3][0];
     int j = local[3][1];
-    int r1 = (i + i*i + j*j) % 11;
+    int r1 = (i + i*i + j*j) % 5;
     int r2 = (j + i*i + j*j) % 5;
-    int r3 = (i*j + i) % 3;
+    int r3 = (i*j + i) % 2;
 
     std::vector<int> p_id;
-    p_id.push_back(15 + r2); // Roof
+    // p_id.push_back(15 + r2); // Roof
+    // p_id.push_back(12 + r3); // Trim
+    // p_id.push_back(0 + r1); // Wall
+    // p_id.push_back(11); // Window
+    p_id.push_back(20 + r1); // Roof
     p_id.push_back(12 + r3); // Trim
-    p_id.push_back(0 + r1); // Wall
+    p_id.push_back(25 + r1); // Wall
     p_id.push_back(11); // Window
     m_renderQueue.setPallette(p_id);
 
@@ -849,14 +869,18 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
 
     int i = local[3][0];
     int j = local[3][1];
-    int r1 = (i + i*i + j*j) % 11;
+    int r1 = (i + i*i + j*j) % 5;
     int r2 = (j + i*i + j*j) % 5;
-    int r3 = (i*j + i) % 3;
+    int r3 = (i*j + i) % 2;
 
     std::vector<int> p_id;
-    p_id.push_back(15 + r2); // Roof
+    // p_id.push_back(15 + r2); // Roof
+    // p_id.push_back(12 + r3); // Trim
+    // p_id.push_back(0 + r1); // Wall
+    // p_id.push_back(11); // Window
+    p_id.push_back(20 + r1); // Roof
     p_id.push_back(12 + r3); // Trim
-    p_id.push_back(0 + r1); // Wall
+    p_id.push_back(25 + r1); // Wall
     p_id.push_back(11); // Window
     m_renderQueue.setPallette(p_id);
 
@@ -1153,18 +1177,43 @@ void CityMapRenderer::generateQueue_overlay1()
         if (tile.surfaceUtilityFlag & 1<<2) ++x;
         if (tile.surfaceUtilityFlag & 1<<3) ++x;
 
-        float v = 0.1f +
-                  0.225f *
-                  ((float)tile.airPollution / 255.f) *
-                  (float)x;
+        float v = CityMap::getTileValue(tile);
 
-        float colour0[] = { 0.15f, 1.f, 0.15f };
+        float colour0[] = { 1.f, 0.15f, 0.15f };
         float colour1[] = { 1.f, 0.15f, 0.15f };
+        float colour2[] = { 0.55f, 0.75f, 0.15f };
+        float colour3[] = { 0.15f, 1.f, 0.15f };
+        float colour4[] = { 0.15f, 0.15f, 1.0f };
         glm::vec3 colourB;
 
-        colourB.x = (1.f - v) * colour0[0] + v * colour1[0];
-        colourB.y = (1.f - v) * colour0[1] + v * colour1[1];
-        colourB.z = (1.f - v) * colour0[2] + v * colour1[2];
+        if (v < 0.25f)
+        {
+          v = (v) * 4.f;
+          colourB.x = (1.f - v) * colour0[0] + v * colour1[0];
+          colourB.y = (1.f - v) * colour0[1] + v * colour1[1];
+          colourB.z = (1.f - v) * colour0[2] + v * colour1[2];
+        }
+        else if (v < 0.5f)
+        {
+          v = (v - 0.25f) * 4.f;
+          colourB.x = (1.f - v) * colour1[0] + v * colour2[0];
+          colourB.y = (1.f - v) * colour1[1] + v * colour2[1];
+          colourB.z = (1.f - v) * colour1[2] + v * colour2[2];
+        }
+        else if (v < 0.75f)
+        {
+          v = (v - 0.5f) * 4.f;
+          colourB.x = (1.f - v) * colour2[0] + v * colour3[0];
+          colourB.y = (1.f - v) * colour2[1] + v * colour3[1];
+          colourB.z = (1.f - v) * colour2[2] + v * colour3[2];
+        }
+        else
+        {
+          v = (v - 0.75f) * 4.f;
+          colourB.x = (1.f - v) * colour3[0] + v * colour4[0];
+          colourB.y = (1.f - v) * colour3[1] + v * colour4[1];
+          colourB.z = (1.f - v) * colour3[2] + v * colour4[2];
+        }
 
         m_renderQueue.setDiffuse(colourB);
         m_renderQueue.setMVP(local);

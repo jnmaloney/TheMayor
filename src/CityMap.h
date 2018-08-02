@@ -51,6 +51,8 @@ public:
   void checkRoadTiles(int i, int j);
   void checkPipeTiles(int i, int j);
 
+  static float getTileValue(const CityTile& tile);
+
   int m_pop = 0;
 
   int m_connected = 0;

@@ -93,6 +93,32 @@ CityTile& CityMap::getTile(unsigned int i, unsigned int j)
 }
 
 
+bool growRes(int dv, int l)
+{
+  // l1  40 20%
+  // l2  80 40%
+  // l3 120 60%
+  // l4 140 80%
+  // l5 200
+  if (dv > l * 40) return true;
+
+  return false;
+}
+
+bool growCom(int dv, int l)
+{
+  // l1  40 20%
+  // l2  80 40%
+  // l3 120
+
+  if (l == 1 && dv > 60) return true;
+  if (l == 2 && dv > 120) return true;
+  if (l == 3) return false;
+
+  return true;
+}
+
+
 void CityMap::update()
 {
   int powerCount = 0;
@@ -113,12 +139,9 @@ void CityMap::update()
         if (tiles[i][j].surfaceUtilityFlag & 1<<2) ++x;
         if (tiles[i][j].surfaceUtilityFlag & 1<<3) ++x;
 
-        float v = 0.1f +
-                  0.225f *
-                  ((float)tiles[i][j].airPollution / 255.f) *
-                  (float)x;
+        float v = getTileValue(tiles[i][j]);
 
-        dval = 100 * v;
+        dval = 200 * v;
       }
 
       // Residence
@@ -142,29 +165,34 @@ void CityMap::update()
           // Grow
           if (m_grow && dice() < dval)
           {
-            tiles[i][j].treeAng2 += 1;
-            if (tiles[i][j].treeAng2 > 49) tiles[i][j].treeAng2 = 49;
-            int newObj = 1 + tiles[i][j].treeAng2 / 10;
-            if (newObj != tiles[i][j].treeAng1)
+            // Value check
+            if (growRes(dval, tiles[i][j].treeAng1))
             {
-              tiles[i][j].treeAng1 = newObj;
+              tiles[i][j].treeAng2 += 1;
 
-              // Set angle to face road
-              if (t_s.road)
+              if (tiles[i][j].treeAng2 > 49) tiles[i][j].treeAng2 = 49;
+              int newObj = 1 + tiles[i][j].treeAng2 / 10;
+              if (newObj != tiles[i][j].treeAng1)
               {
-                tiles[i][j].treeAng3 = 0;
-              }
-              else if (t_e.road)
-              {
-                tiles[i][j].treeAng3 = 3;
-              }
-              else if (t_n.road)
-              {
-                tiles[i][j].treeAng3 = 2;
-              }
-              else
-              {
-                tiles[i][j].treeAng3 = 1;
+                tiles[i][j].treeAng1 = newObj;
+
+                // Set angle to face road
+                if (t_s.road)
+                {
+                  tiles[i][j].treeAng3 = 0;
+                }
+                else if (t_e.road)
+                {
+                  tiles[i][j].treeAng3 = 3;
+                }
+                else if (t_n.road)
+                {
+                  tiles[i][j].treeAng3 = 2;
+                }
+                else
+                {
+                  tiles[i][j].treeAng3 = 1;
+                }
               }
             }
           }
@@ -191,41 +219,44 @@ void CityMap::update()
           // Grow
           if (tiles[i][j].treeAng1 < 3 && m_grow && dice() < dval)
           {
-            tiles[i][j].treeAng2 += 1;
-            if (tiles[i][j].treeAng2 > 19 || tiles[i][j].treeAng1 == 0)
+            if (growCom(dval, tiles[i][j].treeAng1))
             {
-              tiles[i][j].treeAng2 = 0;
-              tiles[i][j].treeAng1++;
+              tiles[i][j].treeAng2 += 1;
+              if (tiles[i][j].treeAng2 > 19 || tiles[i][j].treeAng1 == 0)
+              {
+                tiles[i][j].treeAng2 = 0;
+                tiles[i][j].treeAng1++;
 
-              if (tiles[i][j].treeAng1 == 1)
-              {
-                  tiles[i][j].object_type = 200 + dice() % 3;
-              }
-              if (tiles[i][j].treeAng1 == 2)
-              {
-                  tiles[i][j].object_type = 210 + dice() % 4;
-              }
-              if (tiles[i][j].treeAng1 == 3)
-              {
-                  tiles[i][j].object_type = 220 + dice() % 4;
-              }
+                if (tiles[i][j].treeAng1 == 1)
+                {
+                    tiles[i][j].object_type = 200 + dice() % 3;
+                }
+                if (tiles[i][j].treeAng1 == 2)
+                {
+                    tiles[i][j].object_type = 210 + dice() % 4;
+                }
+                if (tiles[i][j].treeAng1 == 3)
+                {
+                    tiles[i][j].object_type = 220 + dice() % 4;
+                }
 
-              // Set angle to face road
-              if (t_s.road)
-              {
-                tiles[i][j].treeAng3 = 0;
-              }
-              else if (t_e.road)
-              {
-                tiles[i][j].treeAng3 = 3;
-              }
-              else if (t_n.road)
-              {
-                tiles[i][j].treeAng3 = 2;
-              }
-              else
-              {
-                tiles[i][j].treeAng3 = 1;
+                // Set angle to face road
+                if (t_s.road)
+                {
+                  tiles[i][j].treeAng3 = 0;
+                }
+                else if (t_e.road)
+                {
+                  tiles[i][j].treeAng3 = 3;
+                }
+                else if (t_n.road)
+                {
+                  tiles[i][j].treeAng3 = 2;
+                }
+                else
+                {
+                  tiles[i][j].treeAng3 = 1;
+                }
               }
             }
           }
@@ -558,4 +589,17 @@ int CityMap::checkUndergroundTile(const CityTile& a, const CityTile& b, const Ci
   if (c.pipeType) return 4; // inner corner
 
   return 0; //  nothing
+}
+
+
+float CityMap::getTileValue(const CityTile& tile)
+{
+  int x = 1;
+  if (tile.surfaceUtilityFlag & 1<<1) ++x;
+  if (tile.surfaceUtilityFlag & 1<<2) ++x;
+  if (tile.surfaceUtilityFlag & 1<<3) ++x;
+
+  return    0.0f +
+            0.25f * (float)x *
+            (1.f - (float)tile.airPollution / 255.f);
 }
