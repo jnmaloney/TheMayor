@@ -53,6 +53,7 @@ void Simulation::doSkyStep(CityMap* a_map)
     }
   }
 
+  delete[] v;
 }
 
 
@@ -175,4 +176,96 @@ void Simulation::engageRadius(CityMap* a_map, int x, int y, int r, int resource)
       tile.surfaceUtilityFlag |= (1<<resource);
     }
   }
+}
+
+
+int treeLevel(CityTile& tile)
+{
+  if (tile.object_type != 1) return 0; // tree
+
+    return (int)(tile.treeAng1 > 0) +
+           (int)(tile.treeAng2 > 0) +
+           (int)(tile.treeAng3 > 0) +
+           (int)(tile.treeAng4 > 0);
+}
+
+
+void Simulation::doTreeStep(CityMap* a_map)
+{
+  int* v = new int[a_map->m_width * a_map->m_height];
+
+  // Compute
+  for (int i = 0; i < a_map->m_width; ++i)
+  {
+    for (int j = 0; j < a_map->m_height; ++j)
+    {
+      CityTile& tile = a_map->getTile(i, j);
+      CityTile& tileS = a_map->getTile(i, j-1);
+      CityTile& tileN = a_map->getTile(i, j+1);
+      CityTile& tileE = a_map->getTile(i+1, j);
+      CityTile& tileW = a_map->getTile(i-1, j);
+      int c = i * a_map->m_height + j;
+
+
+      //if (tile.object_type == 1) // TREE
+      {
+        int a = treeLevel(tile);
+        float b = 0.25f * (treeLevel(tileE) + treeLevel(tileW) + treeLevel(tileN) + treeLevel(tileS));
+        b += 0.001f * a_map->dice();
+        if (b > 2.45f)
+          v[c] = a + 1;
+        else if (b < 2.12f)
+          v[c] = a - 1;
+        else
+          v[c] = a;
+      }
+    }
+  }
+
+  // Apply
+  for (int i = 0; i < a_map->m_width; ++i)
+  {
+    for (int j = 0; j < a_map->m_height; ++j)
+    {
+      int c = i * a_map->m_height + j;
+      int t = v[c];
+      CityTile& tile = a_map->getTile(i, j);
+      tile.object_type = 0;
+      tile.treeAng1 = 0;
+      tile.treeAng2 = 0;
+      tile.treeAng3 = 0;
+      tile.treeAng4 = 0;
+      if (t < 0) t = 0;
+      if (t > 4) t = 4;
+      while (t)
+      {
+        tile.object_type = 1;
+
+        int d1000 = a_map->dice();
+        if (d1000 < 250 && tile.treeAng1 == 0)
+        {
+          tile.treeAng1 = a_map->dice();
+          --t;
+        }
+        else if (d1000 < 500 && tile.treeAng2 == 0)
+        {
+          tile.treeAng2 = a_map->dice();
+          --t;
+        }
+        else if (d1000 < 750 && tile.treeAng3 == 0)
+        {
+          tile.treeAng3 = a_map->dice();
+          --t;
+        }
+        else if (tile.treeAng4 == 0)
+        {
+          tile.treeAng4 = a_map->dice();
+          --t;
+        }
+      }
+    }
+  }
+
+  delete[] v;
+
 }

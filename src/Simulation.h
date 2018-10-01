@@ -11,6 +11,7 @@ public:
 
   static void doConnectivity(CityMap* a_map, int resource);
 
+  static void doTreeStep(CityMap* a_map);
 
 protected:
 

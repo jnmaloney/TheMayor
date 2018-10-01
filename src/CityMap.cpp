@@ -1,5 +1,16 @@
 #include "CityMap.h"
 #include <random>
+#include <emscripten.h>
+#include <iostream>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <errno.h>
+#include <string.h>
+#include "Simulation.h"
+//#include <filesystem>
+#include <dirent.h>
 
 
 // const int CityMap::m_width = 24;
@@ -59,25 +70,7 @@ void CityMap::generate()
     }
   }
 
-  //
-  // tiles[5][5].object_type = 3;
-  //
-  // tiles[8][11].object_type = 2;
-  // tiles[8][11].treeAng1 = 1;
-  //
-  // tiles[8][12].object_type = 2;
-  // tiles[8][12].treeAng1 = 2;
-  //
-  // tiles[8][13].object_type = 2;
-  // tiles[8][13].treeAng1 = 3;
-  //
-  // tiles[8][14].object_type = 2;
-  // tiles[8][14].treeAng1 = 4;
-  //
-  // tiles[8][15].object_type = 2;
-  // tiles[8][15].treeAng1 = 5;
-
-
+  ready = true;
 }
 
 
@@ -602,4 +595,286 @@ float CityMap::getTileValue(const CityTile& tile)
   return    0.0f +
             0.25f * (float)x *
             (1.f - (float)tile.airPollution / 255.f);
+}
+
+
+void CityMap::save()
+{
+  //emscripten_idb_async_store(
+  // int error = 0;
+  // emscripten_idb_store(
+  //   "civilleDB",
+  //   "map.city",
+  //   &tiles[0][0],
+  //   m_width * m_height * sizeof(CityTile),
+  //   &error
+  // );
+
+
+  // FILE *fp;
+  // int res;
+  // long len;
+  //
+  // fp = fopen("developer.city", "wb+");
+  // res = fwrite(
+  //   &tiles[0][0],
+  //   m_width * m_height * sizeof(CityTile),
+  //   1,
+  //   fp);
+  // fclose(fp);
+
+  // int fd;
+  // int result = 1;
+  // struct stat st;
+  //
+  // if ((stat("/working1/waka.txt", &st) != -1) || (errno != ENOENT))
+  //   result = -4000 - errno;
+  // fd = open("/working1/waka.txt", O_RDWR | O_CREAT, 0666);
+  // if (fd == -1)
+  //   result = -5000 - errno;
+  // else
+  // {
+  //   if (write(fd,"az",2) != 2)
+  //     result = -6000 - errno;
+  //   if (close(fd) != 0)
+  //     result = -7000 - errno;
+  // }
+
+  int fd;
+  int result = 1;
+  struct stat st;
+
+  if ((stat("/working1/developer.city", &st) != -1) || (errno != ENOENT))
+    result = -4000 - errno;
+  fd = open("/working1/developer.city", O_RDWR | O_CREAT, 0666);
+  if (fd == -1)
+    result = -5000 - errno;
+  else
+  {
+    if (write(
+         fd,
+         &tiles[0][0],
+         m_width * m_height * sizeof(CityTile))
+         != m_width * m_height * sizeof(CityTile))
+      result = -6000 - errno;
+    if (close(fd) != 0)
+      result = -7000 - errno;
+  }
+
+  // sync from memory state to persisted and then
+  // run 'success'
+  EM_ASM(
+    FS.syncfs(function (err) {
+      // assert(!err);
+      // ccall('success', 'v');
+    });
+  );
+
+  //std::cout << result << std::endl;
+}
+
+
+void CityMap::load()
+{
+  //emscripten_idb_async_exists
+  //emscripten_idb_async_load
+
+  // int error = 0;
+  // int exists = 0;
+  //
+  // emscripten_idb_exists(
+  //   "civilleDB",
+  //   "map.city",
+  //   &exists,
+  //   &error
+  // );
+  //
+  // if (exists)
+  // {
+  //   void* buf = 0;//&tiles[0][0];
+  //   int num = 0;
+  //
+  //   emscripten_idb_load(
+  //     "civilleDB",
+  //     "map.city",
+  //     &buf,
+  //     &num,
+  //     &error
+  //   );
+  //
+  //   if (num == m_width * m_height * sizeof(CityTile))
+  //   {
+  //     memcpy(buf, &tiles[0][0], num);
+  //   }
+  // }
+
+
+
+  // FILE *fp;
+  // int res;
+  // long len;
+  //
+  // fp = fopen("developer.city", "rb");
+  // if (fp != NULL)
+  // {
+  //   res = fread(
+  //     &tiles[0][0],
+  //     m_width * m_height * sizeof(CityTile),
+  //     1,
+  //     fp);
+  //   fclose(fp);
+  // }
+
+
+  // int fd;
+  // int result = 1;
+  // struct stat st;
+  //
+  // // does the 'az' file exist, and does it contain 'az'?
+  // fd = open("/working1/waka.txt", O_RDONLY);
+  // if (fd == -1)
+  //   result = -15000 - errno;
+  // else
+  // {
+  //   char bf[4];
+  //   int bytes_read = read(fd,&bf[0],sizeof(bf));
+  //   if (bytes_read != 2)
+  //     result = -16000;
+  //   else if ((bf[0] != 'a') || (bf[1] != 'z'))
+  //     result = -17000;
+  //   if (close(fd) != 0)
+  //     result = -18000 - errno;
+  //   if (unlink("/working1/waka.txt") != 0)
+  //     result = -19000 - errno;
+  // }
+
+  int fd;
+  int result = 1;
+  struct stat st;
+
+  // does the 'az' file exist, and does it contain 'az'?
+  fd = open("/working1/developer.city", O_RDONLY);
+  if (fd == -1)
+    result = -15000 - errno;
+  else
+  {
+    char* bf = (char*)&tiles[0][0];
+    int size = m_width * m_height * sizeof(CityTile);
+    int bytes_read = read(fd, bf, size);
+    if (bytes_read != size)
+      result = -16000;
+
+    if (close(fd) != 0)
+      result = -18000 - errno;
+  }
+
+  //std::cout << result << std::endl;
+  ready = true;
+}
+
+
+void CityMap::availableLoadFiles(std::vector<std::string>& files)
+{
+  // std::string path = "/working1";
+  // for (auto & p : fs::directory_iterator(path))
+  // {
+  //   //std::cout << p << std::endl;
+  //   files.push_back(p);
+  // }
+
+
+  // int dirp = opendir("/working1");
+  // while ((dp = readdir(dirp)) != NULL)
+  //   if (dp->d_namlen == len && !strcmp(dp->d_name, name))
+  //   {
+  //     (void)closedir(dirp);
+  //     return FOUND;
+  //   }
+  // (void)closedir(dirp);
+
+
+  char complete_filename[512];
+  struct dirent **namelist;
+  struct stat buf;
+  int n = scandir("/working1", &namelist, 0, alphasort);
+  int i;
+
+  for ( i = 0; i < n; i++ )
+  {
+     char *file_name = namelist[i]->d_name;
+
+     strcpy(complete_filename, "./");
+     strcat(complete_filename, "/");
+     strcat(complete_filename, file_name);
+
+     //printf("%s\n", file_name);
+     files.push_back(std::string(file_name));
+  }
+
+}
+
+
+void CityMap::loadFile(std::string cityName)
+{
+  int fd;
+  int result = 1;
+  struct stat st;
+
+  // does the 'az' file exist, and does it contain 'az'?
+  std::string path = std::string("/working1/") + cityName + std::string(".city");
+  fd = open(path.c_str(), O_RDONLY);
+  if (fd == -1)
+    result = -15000 - errno;
+  else
+  {
+    char* bf = (char*)&tiles[0][0];
+    int size = m_width * m_height * sizeof(CityTile);
+    int bytes_read = read(fd, bf, size);
+    if (bytes_read != size)
+      result = -16000;
+
+    if (close(fd) != 0)
+      result = -18000 - errno;
+  }
+
+  //std::cout << result << std::endl;
+  ready = true;
+}
+
+
+void CityMap::saveFile(std::string cityName)
+{
+  int fd;
+  int result = 1;
+  struct stat st;
+
+  std::string path = std::string("/working1/") + cityName + std::string(".city");
+  if ((stat(path.c_str(), &st) != -1) || (errno != ENOENT))
+    result = -4000 - errno;
+  fd = open(path.c_str(), O_RDWR | O_CREAT, 0666);
+  if (fd == -1)
+    result = -5000 - errno;
+  else
+  {
+    if (write(
+         fd,
+         &tiles[0][0],
+         m_width * m_height * sizeof(CityTile))
+         != m_width * m_height * sizeof(CityTile))
+      result = -6000 - errno;
+    if (close(fd) != 0)
+      result = -7000 - errno;
+  }
+
+  // sync from memory state to persisted
+  EM_ASM(
+    FS.syncfs(function (err) {
+    });
+  );
+}
+
+
+void CityMap::processTrees()
+{
+  Simulation::doTreeStep(this);
 }

@@ -371,13 +371,13 @@ void CityMapRenderer::generateQueue0()
           if (m_cityMap->getTile(i, j).zone == 1)
           {
             m_renderQueue.setProgram(m_rs->programObject2);
-            m_renderQueue.setMesh(m_meshes[7]);
+            m_renderQueue.setMesh(7);
             m_renderQueue.setMVP(local);
           }
           else
           {
             m_renderQueue.setProgram(m_rs->programObject2);
-            m_renderQueue.setMesh(m_meshes[8]);
+            m_renderQueue.setMesh(8);
             m_renderQueue.setMVP(local);
           }
         }
@@ -385,7 +385,7 @@ void CityMapRenderer::generateQueue0()
         {
           // Grass tile
           m_renderQueue.setProgram(m_rs->programObject);
-          m_renderQueue.setMesh(m_meshes[0]);
+          m_renderQueue.setMesh(0);
           m_renderQueue.setMVP(local);
         }
 
@@ -436,21 +436,21 @@ void CityMapRenderer::generateQueue1()
         if (tile.object_type == 2) // Water
         {
           m_renderQueue.setProgram(m_rs->programObject);
-          m_renderQueue.setMesh(m_meshes[39]);
+          m_renderQueue.setMesh(39);
           m_renderQueue.setDiffuse(glm::vec3(0.5f, 0.5f, 1.0f));
           m_renderQueue.setMVP(glm::scale(local, glm::vec3(0.47)));
         }
         if (tile.object_type == 3) // Power
         {
           m_renderQueue.setProgram(m_rs->programObject);
-          m_renderQueue.setMesh(m_meshes[39]);
+          m_renderQueue.setMesh(39);
           m_renderQueue.setDiffuse(glm::vec3(1.f, 0.5f, 0.5f));
           m_renderQueue.setMVP(glm::scale(local, glm::vec3(0.47)));
         }
         if (tile.object_type == 4) //
         {
           m_renderQueue.setProgram(m_rs->programObject);
-          m_renderQueue.setMesh(m_meshes[40]);
+          m_renderQueue.setMesh(40);
           if (tile.utilityFlag & (1<<2))
             m_renderQueue.setDiffuse(glm::vec3(1.f, 0.5f, 0.5f));
           else
@@ -460,14 +460,14 @@ void CityMapRenderer::generateQueue1()
         if (tile.object_type == 5) // Data
         {
           m_renderQueue.setProgram(m_rs->programObject);
-          m_renderQueue.setMesh(m_meshes[39]);
+          m_renderQueue.setMesh(39);
           m_renderQueue.setDiffuse(glm::vec3(0.5f, 1.f, 0.5f));
           m_renderQueue.setMVP(glm::scale(local, glm::vec3(0.47)));
         }
         if (tile.object_type == 6) //
         {
           m_renderQueue.setProgram(m_rs->programObject);
-          m_renderQueue.setMesh(m_meshes[40]);
+          m_renderQueue.setMesh(40);
           if (tile.utilityFlag & (1<<3))
             m_renderQueue.setDiffuse(glm::vec3(0.5f, 1.f, 0.5f));
           else
@@ -494,7 +494,7 @@ void CityMapRenderer::generateQueue1()
           if (tile.pipeType == 3) dull = glm::vec3(64.0/255.0, 123.0/255.0, 79.0/255.00);
 
           m_renderQueue.setProgram(m_rs->programObject);
-          m_renderQueue.setMesh(m_meshes[18 + tile.pipeNum]);
+          m_renderQueue.setMesh(18 + tile.pipeNum);
           if (tile.utilityFlag & (1<<tile.pipeType))
             m_renderQueue.setDiffuse(bright);
           else
@@ -509,7 +509,7 @@ void CityMapRenderer::generateQueue1()
 
           // ground under pipe
           m_renderQueue.setProgram(m_rs->programObject2);
-          m_renderQueue.setMesh(m_meshes[25]);
+          m_renderQueue.setMesh(25);
           m_renderQueue.setMVP(glm::translate(local, glm::vec3(0.f, 0.f, -0.330f)));
         }
         else // Draw cliffs
@@ -532,7 +532,7 @@ void CityMapRenderer::generateQueue1()
             // Top ground (no cliffs)
             sublocal = glm::translate(sublocal, glm::vec3(0.0f, 0.0f, h));
             m_renderQueue.setProgram(m_rs->programObject2);
-            m_renderQueue.setMesh(m_meshes[24]);
+            m_renderQueue.setMesh(24);
             m_renderQueue.setMVP(sublocal);
           }
 
@@ -547,7 +547,7 @@ void CityMapRenderer::generateQueue1()
             // Top ground (no cliffs)
             sublocal = glm::translate(sublocal, glm::vec3(0.0f, 0.0f, h));
             m_renderQueue.setProgram(m_rs->programObject2);
-            m_renderQueue.setMesh(m_meshes[24]);
+            m_renderQueue.setMesh(24);
             m_renderQueue.setMVP(sublocal);
           }
 
@@ -563,7 +563,7 @@ void CityMapRenderer::generateQueue1()
             // Top ground (no cliffs)
             sublocal = glm::translate(sublocal, glm::vec3(0.0f, 0.0f, h));
             m_renderQueue.setProgram(m_rs->programObject2);
-            m_renderQueue.setMesh(m_meshes[24]);
+            m_renderQueue.setMesh(24);
             m_renderQueue.setMVP(sublocal);
           }
 
@@ -579,7 +579,7 @@ void CityMapRenderer::generateQueue1()
             // Top ground (no cliffs)
             sublocal = glm::translate(sublocal, glm::vec3(0.0f, 0.0f, h));
             m_renderQueue.setProgram(m_rs->programObject2);
-            m_renderQueue.setMesh(m_meshes[24]);
+            m_renderQueue.setMesh(24);
             m_renderQueue.setMVP(sublocal);
           }
         }
@@ -605,7 +605,7 @@ void CityMapRenderer::drawCliffSide(glm::mat4 MVP, char i, bool hideOutDebug)
 
   // Base
   m_renderQueue.setProgram(m_rs->programObject2);
-  m_renderQueue.setMesh(m_meshes[25]);
+  m_renderQueue.setMesh(25);
   m_renderQueue.setMVP(glm::translate(MVP, glm::vec3(0.f, 0.f, -0.01f)));
 
   if (i == 1) // corner
@@ -615,7 +615,7 @@ void CityMapRenderer::drawCliffSide(glm::mat4 MVP, char i, bool hideOutDebug)
     local = glm::scale(local, glm::vec3(0.333, 0.333, 0.333));
 
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[cliff1]);
+    m_renderQueue.setMesh(cliff1);
     m_renderQueue.setMVP(local);
   }
   if (i == 2)
@@ -625,7 +625,7 @@ void CityMapRenderer::drawCliffSide(glm::mat4 MVP, char i, bool hideOutDebug)
     local = glm::scale(local, glm::vec3(0.333, 0.333, 0.333));
 
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[cliff0]);
+    m_renderQueue.setMesh(cliff0);
     m_renderQueue.setMVP(local);
   }
   if (i == 3)
@@ -635,7 +635,7 @@ void CityMapRenderer::drawCliffSide(glm::mat4 MVP, char i, bool hideOutDebug)
     local = glm::scale(local, glm::vec3(0.333, 0.333, 0.333));
 
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[cliff0]);
+    m_renderQueue.setMesh(cliff0);
     m_renderQueue.setMVP(local);
   }
   if (i == 4) // inner corner
@@ -645,7 +645,7 @@ void CityMapRenderer::drawCliffSide(glm::mat4 MVP, char i, bool hideOutDebug)
     local = glm::scale(local, glm::vec3(0.333, 0.333, 0.333));
 
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[cliff0]);
+    m_renderQueue.setMesh(cliff0);
     m_renderQueue.setMVP(local);
 
     local = glm::rotate(MVP, (float)1.57079632679f, glm::vec3(0.f, 0.f, 1.f));
@@ -653,7 +653,7 @@ void CityMapRenderer::drawCliffSide(glm::mat4 MVP, char i, bool hideOutDebug)
     local = glm::scale(local, glm::vec3(0.333, 0.333, 0.333));
 
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[cliff0]);
+    m_renderQueue.setMesh(cliff0);
     m_renderQueue.setMVP(local);
   }
 }
@@ -667,7 +667,7 @@ void CityMapRenderer::tick()
   m_renderQueueAdd.clear();
 
   m_renderQueueAdd.setProgram(m_rs->programObject2);
-  m_renderQueueAdd.setMesh(m_meshes[37]); // Ring
+  m_renderQueueAdd.setMesh(37); // Ring
   float x = (int)(m_rs->m_cursorX + 0.5f);
   float y = (int)(m_rs->m_cursorY + 0.5f);
   //m_renderQueueAdd.setMVP(glm::translate(glm::mat4(1.0f), glm::vec3(1.f * x, 1.f * y, 0.f)));
@@ -692,9 +692,9 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
     m_renderQueue.setProgram(m_rs->programObject);
 
     if (tile.treeAng1 == 1 && tile.treeAng2 == 1 && tile.treeAng3 == 1 && tile.treeAng4 == 1)
-      m_renderQueue.setMesh(m_meshes[38]); // Oak
+      m_renderQueue.setMesh(38); // Oak
     else
-      m_renderQueue.setMesh(m_meshes[1]); // Pine
+      m_renderQueue.setMesh(1); // Pine
 
     glm::mat4 sublocal = glm::scale(local, glm::vec3(0.25f));
 
@@ -740,7 +740,7 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
       glm::vec3(0.f, 0.f, 1.f));
 
     m_renderQueue.setProgram(m_rs->programObject2);
-    m_renderQueue.setMesh(m_meshes[3 + tile.roadNum]);
+    m_renderQueue.setMesh(3 + tile.roadNum);
 
     m_renderQueue.setMVP(sublocal);
   }
@@ -749,7 +749,7 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
   if (tile.object_type == 2)
   {
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[13]);
+    m_renderQueue.setMesh(13);
 
     glm::mat4 sublocal = glm::scale(local, glm::vec3(0.75f));
 
@@ -760,7 +760,7 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
   if (tile.object_type == 3)
   {
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[14]);
+    m_renderQueue.setMesh(14);
 
     glm::mat4 sublocal = glm::scale(local, glm::vec3(0.64f));
 
@@ -771,7 +771,7 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
   if (tile.object_type == 4)
   {
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[15]);
+    m_renderQueue.setMesh(15);
 
     glm::mat4 sublocal = glm::scale(local, glm::vec3(0.16f));
 
@@ -782,7 +782,7 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
   if (tile.object_type == 5)
   {
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[16]);
+    m_renderQueue.setMesh(16);
 
     glm::mat4 sublocal = glm::scale(local, glm::vec3(0.75f));
 
@@ -793,7 +793,7 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
   if (tile.object_type == 6)
   {
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[17]);
+    m_renderQueue.setMesh(17);
 
     glm::mat4 sublocal = glm::scale(local, glm::vec3(0.50f));
 
@@ -809,7 +809,7 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
   if (tile.object_type == 101)
   {
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[2]);
+    m_renderQueue.setMesh(2);
 
     glm::mat4 sublocal = glm::scale(local, glm::vec3(0.1));
 
@@ -836,7 +836,7 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
   if (tile.object_type == 102)
   {
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[9]);
+    m_renderQueue.setMesh(9);
 
     glm::mat4 sublocal = glm::scale(local, glm::vec3(0.1));
 
@@ -863,7 +863,7 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
   if (tile.object_type == 103)
   {
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[10]);
+    m_renderQueue.setMesh(10);
 
     glm::mat4 sublocal = glm::scale(local, glm::vec3(0.1));
 
@@ -890,7 +890,7 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
   if (tile.object_type == 104)
   {
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[11]);
+    m_renderQueue.setMesh(11);
 
     glm::mat4 sublocal = glm::scale(local, glm::vec3(0.1));
 
@@ -913,7 +913,7 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
   if (tile.object_type == 105)
   {
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[12]);
+    m_renderQueue.setMesh(12);
 
     glm::mat4 sublocal = glm::scale(local, glm::vec3(0.1));
 
@@ -936,7 +936,7 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
   if (tile.object_type == 200)
   {
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[26]);
+    m_renderQueue.setMesh(26);
 
     glm::mat4 sublocal = glm::scale(local, glm::vec3(0.1f));
 
@@ -946,7 +946,7 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
   if (tile.object_type == 201)
   {
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[27]);
+    m_renderQueue.setMesh(27);
 
     glm::mat4 sublocal = glm::scale(local, glm::vec3(0.1f));
 
@@ -956,7 +956,7 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
   if (tile.object_type == 202)
   {
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[28]);
+    m_renderQueue.setMesh(28);
 
     glm::mat4 sublocal = glm::scale(local, glm::vec3(0.1f));
 
@@ -966,7 +966,7 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
   if (tile.object_type == 210)
   {
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[29]);
+    m_renderQueue.setMesh(29);
 
     glm::mat4 sublocal = glm::scale(local, glm::vec3(0.1f));
 
@@ -988,7 +988,7 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
   if (tile.object_type == 211)
   {
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[30]); // different
+    m_renderQueue.setMesh(30); // different
 
     glm::mat4 sublocal = glm::scale(local, glm::vec3(0.1f));
 
@@ -1010,7 +1010,7 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
   if (tile.object_type == 212)
   {
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[31]);
+    m_renderQueue.setMesh(31);
 
     glm::mat4 sublocal = glm::scale(local, glm::vec3(0.1f));
 
@@ -1032,7 +1032,7 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
   if (tile.object_type == 213)
   {
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[32]);
+    m_renderQueue.setMesh(32);
 
     glm::mat4 sublocal = glm::scale(local, glm::vec3(0.1f));
 
@@ -1054,7 +1054,7 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
   if (tile.object_type == 220)
   {
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[33]);
+    m_renderQueue.setMesh(33);
 
     glm::mat4 sublocal = glm::scale(local, glm::vec3(0.1f));
 
@@ -1076,7 +1076,7 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
   if (tile.object_type == 221)
   {
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[34]);
+    m_renderQueue.setMesh(34);
 
     glm::mat4 sublocal = glm::scale(local, glm::vec3(0.1f));
 
@@ -1098,7 +1098,7 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
   if (tile.object_type == 222)
   {
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[35]); // different
+    m_renderQueue.setMesh(35); // different
 
     glm::mat4 sublocal = glm::scale(local, glm::vec3(0.1f));
 
@@ -1120,7 +1120,7 @@ void CityMapRenderer::drawTile(CityTile& tile, glm::mat4& local)
   if (tile.object_type == 223)
   {
     m_renderQueue.setProgram(m_rs->programObject);
-    m_renderQueue.setMesh(m_meshes[36]);
+    m_renderQueue.setMesh(36);
 
     glm::mat4 sublocal = glm::scale(local, glm::vec3(0.1f));
 
@@ -1169,7 +1169,7 @@ void CityMapRenderer::generateQueue_overlay1()
 
         // Tile
         m_renderQueue.setProgram(m_rs->programObject2);
-        m_renderQueue.setMesh(m_meshes[0]);
+        m_renderQueue.setMesh(0);
 
         // Utility value
         int x = 1;
@@ -1227,7 +1227,7 @@ void CityMapRenderer::generateQueue_overlay1()
             glm::vec3(0.f, 0.f, 1.f));
 
           m_renderQueue.setProgram(m_rs->programObject2);
-          m_renderQueue.setMesh(m_meshes[3 + tile.roadNum]);
+          m_renderQueue.setMesh(3 + tile.roadNum);
 
           m_renderQueue.setMVP(sublocal);
         }
@@ -1266,7 +1266,7 @@ void CityMapRenderer::generateQueue_overlay2()
 
         // Tile
         m_renderQueue.setProgram(m_rs->programObject2);
-        m_renderQueue.setMesh(m_meshes[0]);
+        m_renderQueue.setMesh(0);
 
         float colour0[] = { 200.f / 255.f, 224.f / 255.f,  224.f / 255.f }; // Skylight
         float colour1[] = { 205.f / 255.f, 178.f / 255.f,  165.f / 255.f }; // Dusty Rose
@@ -1289,7 +1289,7 @@ void CityMapRenderer::generateQueue_overlay2()
             glm::vec3(0.f, 0.f, 1.f));
 
           m_renderQueue.setProgram(m_rs->programObject2);
-          m_renderQueue.setMesh(m_meshes[3 + tile.roadNum]);
+          m_renderQueue.setMesh(3 + tile.roadNum);
 
           m_renderQueue.setMVP(sublocal);
         }
@@ -1300,9 +1300,9 @@ void CityMapRenderer::generateQueue_overlay2()
           m_renderQueue.setProgram(m_rs->programObject);
 
           if (tile.treeAng1 == 1 && tile.treeAng2 == 1 && tile.treeAng3 == 1 && tile.treeAng4 == 1)
-            m_renderQueue.setMesh(m_meshes[38]); // Oak
+            m_renderQueue.setMesh(38); // Oak
           else
-            m_renderQueue.setMesh(m_meshes[1]); // Pine
+            m_renderQueue.setMesh(1); // Pine
 
           glm::mat4 sublocal = glm::scale(local, glm::vec3(0.25f));
 
@@ -1373,7 +1373,7 @@ void CityMapRenderer::generateQueue_overlay3()
 
         // Tile
         m_renderQueue.setProgram(m_rs->programObject2);
-        m_renderQueue.setMesh(m_meshes[0]);
+        m_renderQueue.setMesh(0);
 
         if (tile.surfaceUtilityFlag & 1<<1)
         {
@@ -1395,7 +1395,7 @@ void CityMapRenderer::generateQueue_overlay3()
             glm::vec3(0.f, 0.f, 1.f));
 
           m_renderQueue.setProgram(m_rs->programObject2);
-          m_renderQueue.setMesh(m_meshes[3 + tile.roadNum]);
+          m_renderQueue.setMesh(3 + tile.roadNum);
 
           m_renderQueue.setMVP(sublocal);
         }
@@ -1404,7 +1404,7 @@ void CityMapRenderer::generateQueue_overlay3()
         if (tile.object_type == 2)
         {
           m_renderQueue.setProgram(m_rs->programObject);
-          m_renderQueue.setMesh(m_meshes[13]);
+          m_renderQueue.setMesh(13);
 
           glm::mat4 sublocal = glm::scale(local, glm::vec3(0.75f));
 
@@ -1446,7 +1446,7 @@ void CityMapRenderer::generateQueue_overlay4()
 
         // Tile
         m_renderQueue.setProgram(m_rs->programObject2);
-        m_renderQueue.setMesh(m_meshes[0]);
+        m_renderQueue.setMesh(0);
 
         if (tile.surfaceUtilityFlag & 1<<2)
         {
@@ -1468,7 +1468,7 @@ void CityMapRenderer::generateQueue_overlay4()
             glm::vec3(0.f, 0.f, 1.f));
 
           m_renderQueue.setProgram(m_rs->programObject2);
-          m_renderQueue.setMesh(m_meshes[3 + tile.roadNum]);
+          m_renderQueue.setMesh(3 + tile.roadNum);
 
           m_renderQueue.setMVP(sublocal);
         }
@@ -1479,7 +1479,7 @@ void CityMapRenderer::generateQueue_overlay4()
           if (tile.object_type == 3)
           {
             m_renderQueue.setProgram(m_rs->programObject);
-            m_renderQueue.setMesh(m_meshes[14]);
+            m_renderQueue.setMesh(14);
 
             glm::mat4 sublocal = glm::scale(local, glm::vec3(0.64f));
 
@@ -1491,7 +1491,7 @@ void CityMapRenderer::generateQueue_overlay4()
           if (tile.object_type == 4)
           {
             m_renderQueue.setProgram(m_rs->programObject);
-            m_renderQueue.setMesh(m_meshes[15]);
+            m_renderQueue.setMesh(15);
 
             glm::mat4 sublocal = glm::scale(local, glm::vec3(0.20f));
 
@@ -1533,7 +1533,7 @@ void CityMapRenderer::generateQueue_overlay5()
 
         // Tile
         m_renderQueue.setProgram(m_rs->programObject2);
-        m_renderQueue.setMesh(m_meshes[0]);
+        m_renderQueue.setMesh(0);
 
         if (tile.surfaceUtilityFlag & 1<<3)
         {
@@ -1555,7 +1555,7 @@ void CityMapRenderer::generateQueue_overlay5()
             glm::vec3(0.f, 0.f, 1.f));
 
           m_renderQueue.setProgram(m_rs->programObject2);
-          m_renderQueue.setMesh(m_meshes[3 + tile.roadNum]);
+          m_renderQueue.setMesh(3 + tile.roadNum);
 
           m_renderQueue.setMVP(sublocal);
         }
@@ -1566,7 +1566,7 @@ void CityMapRenderer::generateQueue_overlay5()
           if (tile.object_type == 5)
           {
             m_renderQueue.setProgram(m_rs->programObject);
-            m_renderQueue.setMesh(m_meshes[16]);
+            m_renderQueue.setMesh(16);
 
             glm::mat4 sublocal = glm::scale(local, glm::vec3(0.75f));
 
@@ -1578,7 +1578,7 @@ void CityMapRenderer::generateQueue_overlay5()
           if (tile.object_type == 6)
           {
             m_renderQueue.setProgram(m_rs->programObject);
-            m_renderQueue.setMesh(m_meshes[17]);
+            m_renderQueue.setMesh(17);
 
             glm::mat4 sublocal = glm::scale(local, glm::vec3(0.50f));
 

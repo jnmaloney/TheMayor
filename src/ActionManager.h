@@ -2,6 +2,7 @@
 
 
 #include "CityMap.h"
+#include "LineTool.h"
 
 
 class ActionManager
@@ -23,6 +24,14 @@ public:
 
   bool continueAction() { return m_action == 1 || m_action == 2 || m_action == 3; }
 
+
+  void beginActionCommand();
+  void releaseActionCommand();
+  void cancelActionCommand();
+  void cursorPos(int x, int y);
+  
+  LineTool m_lineTool;
+
 protected:
 
   int m_action = 0;
@@ -30,4 +39,7 @@ protected:
   int m_i = -1;
   int m_j = -1;
 
+
+
+  bool m_dragEnabled = false;
 };

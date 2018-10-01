@@ -1,6 +1,10 @@
 #pragma once
 
 
+#include <vector>
+#include <string>
+
+
 class CityTile
 {
 public:
@@ -62,6 +66,16 @@ public:
   int m_data_connected = 0;
   int m_comm = 0;
 
+
+  void loadFile(std::string cityName);
+  void saveFile(std::string cityName);
+  static void availableLoadFiles(std::vector<std::string>& files);
+
+  void processTrees();
+  int dice();
+
+  bool ready = false;
+
 protected:
 
   void checkRoadTile(int i, int j);
@@ -74,6 +88,7 @@ protected:
 
   bool m_grow = false;
 
-  int dice();
+  void save();
+  void load();
 
 };

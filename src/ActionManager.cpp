@@ -200,3 +200,76 @@ void ActionManager::performTileAction()
     }
   }
 }
+
+
+void ActionManager::beginActionCommand()
+{
+  m_lineTool.reset();
+
+  if (m_action == 1 || m_action == 2 || m_action == 3 ||
+      m_action == 101 || m_action == 102 || m_action == 103)
+      {
+        m_dragEnabled = true;
+      }
+  else m_dragEnabled = false;
+
+
+  if (m_dragEnabled)
+  {
+    m_lineTool.reset();
+    m_lineTool.setPoint(m_i, m_j);
+  }
+  else
+  {
+    performTileAction();
+  }
+}
+
+
+void ActionManager::releaseActionCommand()
+{
+  if (m_dragEnabled)
+  {
+    int x1, x2, y1, y2;
+    if (!m_lineTool.getLine(x1, y1, x2, y2))
+    {
+      m_lineTool.reset();
+      m_dragEnabled = false;
+      m_action = 0;
+      return;
+    }
+
+    if (x1 > x2) std::swap(x1, x2);
+    if (y1 > y2) std::swap(y1, y2);
+
+    for (int i = x1; i <= x2; ++i)
+    {
+      for (int j = y1; j <= y2; ++j)
+      {
+        setCursorPos(i, j);
+        performTileAction();
+      }
+    }
+  }
+  m_lineTool.reset();
+  m_dragEnabled = false;
+  m_action = 0;
+}
+
+
+void ActionManager::cancelActionCommand()
+{
+  m_dragEnabled = false;
+  m_action = 0;
+  m_lineTool.reset();
+}
+
+
+void ActionManager::cursorPos(int x, int y)
+{
+  if (m_dragEnabled && m_action > 0)
+  {
+    //performTileAction();
+    m_lineTool.setPoint(x, y);
+  }
+}
